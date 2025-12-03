@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAN'S CLASS - Korean Notes (Audio & Papago)</title>
+    <style>
+        :root {
+            --bg-color: #fff0f5; /* Lavender Blush */
+            --accent-pink: #ffb7b2; /* Rose pastel */
+            --accent-red: #ff6961; /* Rouge doux */
+            --paper-lines: #e6e6fa; /* Bleu/Gris très pâle */
+            --text-color: #4a4a4a; /* Gris foncé */
+            --shadow: 0 10px 25px rgba(255, 105, 97, 0.15);
+            --papago-color: #00C73C; /* Vert Papago */
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: radial-gradient(var(--accent-pink) 2px, transparent 2px);
+            background-size: 25px 25px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* La Feuille de Papier */
+        .paper-sheet {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 900px;
+            min-height: 1000px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            padding: 40px 50px;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            position: relative;
+            background-image: linear-gradient(var(--paper-lines) 1px, transparent 1px);
+            background-size: 100% 2rem;
+            line-height: 2rem;
+        }
+
+        /* Trous de classeur */
+        .binder-holes {
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            height: 90%;
+            margin: auto 0;
+        }
+        .hole {
+            width: 15px;
+            height: 15px;
+            background-color: var(--bg-color);
+            border-radius: 50%;
+            box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* En-tête */
+        header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--accent-pink);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--accent-red);
+            font-size: 2.8rem;
+            margin: 0;
+            letter-spacing: 1px;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        /* BARRE DE RECHERCHE */
+        .search-container {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed var(--accent-pink);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid var(--accent-pink);
+            border-radius: 25px;
+            font-size: 1rem;
+            font-family: inherit;
+            color: var(--text-color);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23ff6961" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: 95% center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 8px rgba(255, 105, 97, 0.2);
+        }
+
+        /* Navigation Onglets */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--accent-pink);
+            border: none;
+            padding: 10px 16px;
+            font-family: inherit;
+            color: white;
+            font-weight: bold;
+            border-radius: 12px 12px 0 0;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        .tab-btn:hover { opacity: 1; transform: translateY(-2px); }
+        .tab-btn.active {
+            background: var(--accent-red);
+            opacity: 1;
+            padding-bottom: 12px;
+        }
+
+        /* Contenu */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .tab-content.active { display: block; }
+        
+        #search-results-tab { display: none; }
+        #search-results-tab.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            color: var(--accent-red);
+            margin-top: 35px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--accent-pink);
+            padding-left: 10px;
+            line-height: 1.5rem;
+            scroll-margin-top: 80px; /* Pour l'ancre */
+        }
+
+        /* Tableaux */
+        .vocab-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.95);
+            margin-bottom: 25px;
+        }
+
+        .vocab-table th {
+            text-align: left;
+            padding: 10px;
+            color: var(--accent-red);
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-pink);
+            font-size: 0.9rem;
+        }
+
+        .vocab-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--paper-lines);
+            vertical-align: top;
+        }
+
+        .korean-word {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #333;
+            /* Flex pour aligner le bouton play */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        /* Bouton Play Audio */
+        .speak-btn {
+            background: #fff;
+            border: 1px solid var(--accent-pink);
+            color: var(--accent-red);
+            cursor: pointer;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            padding: 0;
+        }
+        .speak-btn:hover {
+            background: var(--accent-red);
+            color: white;
+            transform: scale(1.1);
+        }
+        .speak-btn:active {
+            transform: scale(0.9);
+        }
+        
+        .grammar-pattern {
+            font-weight: 700;
+            color: var(--accent-red);
+            font-family: monospace, sans-serif;
+            font-size: 1.05rem;
+        }
+
+        .english-word {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        /* Exemple Column Specific Style */
+        .example-cell {
+            color: #777;
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        .example-cell strong {
+            color: var(--accent-red);
+            font-style: normal;
+        }
+
+        .note-bubble {
+            background-color: #fff9c4;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            margin: 20px 0;
+            border-left: 4px solid #fbc02d;
+            line-height: 1.6;
+            scroll-margin-top: 80px;
+        }
+        .note-bubble strong { color: #f57f17; }
+        
+        /* Résultats de recherche style "Carte" */
+        .search-result-card {
+            background: white;
+            border: 1px solid var(--accent-pink);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .search-result-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-color: var(--accent-red);
+        }
+        .result-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: white;
+            background: var(--accent-pink);
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .result-content { font-size: 0.95rem; color: #444; }
+        .result-arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-pink);
+            font-size: 1.2rem;
+        }
+
+        /* Animation de highlight */
+        @keyframes highlightPulse {
+            0% { background-color: rgba(255, 235, 59, 0); }
+            50% { background-color: rgba(255, 235, 59, 0.5); }
+            100% { background-color: rgba(255, 235, 59, 0); }
+        }
+        .flash-highlight {
+            animation: highlightPulse 2s ease-out;
+        }
+        
+        /* Décorations */
+        .sticker {
+            position: absolute;
+            font-size: 2.5rem;
+            pointer-events: none;
+            z-index: 10;
+            filter: drop-shadow(2px 3px 0px rgba(0,0,0,0.1));
+        }
+        .sticker-1 { top: -20px; right: -15px; transform: rotate(15deg); }
+        .sticker-2 { bottom: 20px; right: 20px; transform: rotate(-10deg); font-size: 3rem; }
+        .sticker-3 { top: 130px; left: -15px; transform: rotate(-45deg); font-size: 2rem; }
+        .sticker-4 { bottom: 120px; left: 10px; transform: rotate(10deg); font-size: 1.5rem; }
+        
+        .batchim-box {
+            background: white;
+            padding: 15px;
+            border: 2px dashed var(--accent-pink);
+            border-radius: 8px;
+            text-align: center;
+            margin: 15px 0;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        /* ================= PAPAGO WIDGET STYLES ================= */
+        /* Floating Button */
+        .fab-translate {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--papago-color);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .fab-translate:hover { transform: scale(1.1) rotate(10deg); }
+
+        /* Modal Overlay */
+        .trans-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.2s;
+        }
+
+        /* Modal Card (Post-it style) */
+        .trans-card {
+            background: #fff9c4; /* Jaune post-it */
+            width: 90%;
+            max-width: 350px;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #fbc02d;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            text-align: center;
+            position: relative;
+            transform: rotate(-2deg);
+        }
+
+        .trans-card h3 {
+            margin-top: 0;
+            color: #f57f17;
+            font-size: 1.2rem;
+        }
+
+        .trans-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px dashed #fbc02d;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: inherit;
+            background: rgba(255,255,255,0.7);
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .trans-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .trans-btn {
+            background: var(--papago-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: opacity 0.2s;
+        }
+        .trans-btn:hover { opacity: 0.9; }
+        
+        .close-modal {
+            position: absolute;
+            top: 5px; right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #fbc02d;
+            background: none;
+            border: none;
+        }
+
+        @media (max-width: 600px) {
+            .paper-sheet { padding: 20px 15px; }
+            .binder-holes { display: none; }
+            h1 { font-size: 2rem; }
+            .tab-btn { flex: 1 1 40%; font-size: 0.85rem; }
+            .fab-translate { width: 50px; height: 50px; font-size: 1.5rem; bottom: 20px; right: 20px;}
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAPAGO FLOATING BUTTON -->
+    <button class="fab-translate" onclick="openTranslator()" title="Open Papago Translator">
+        🦜
+    </button>
+
+    <!-- PAPAGO MODAL (Hidden) -->
+    <div id="transModal" class="trans-modal" onclick="closeTranslator(event)">
+        <div class="trans-card" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="closeTranslator()">×</button>
+            <h3>🦜 Papago Quick Translate</h3>
+            <p style="font-size:0.8rem; color:#666;">Type here to open in Papago app/web</p>
+            <textarea id="transInput" class="trans-input" placeholder="Type text here... (English or Korean)"></textarea>
+            <div class="trans-actions">
+                <button class="trans-btn" onclick="translateText()">Translate ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <main class="paper-sheet">
+        <div class="binder-holes">
+            <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+            <div class="hole"></div><div class="hole"></div><div class="hole"></div>
+        </div>
+        <div class="sticker sticker-1">🍓</div>
+        <div class="sticker sticker-2">🧸</div>
+        <div class="sticker sticker-3">✏️</div>
+        <div class="sticker sticker-4">🌸</div>
+
+        <header>
+            <h1>RAN'S CLASS</h1>
+        </header>
+
+        <!-- SEARCH BAR -->
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search word, rule, or section..." onkeyup="performSearch()">
+        </div>
+
+        <!-- Navigation Updated -->
+        <nav class="tabs" id="navTabs">
+            <button class="tab-btn active" onclick="openTab(event, 'part1')">Basics</button>
+            <button class="tab-btn" onclick="openTab(event, 'part2')">Family & Time</button>
+            <button class="tab-btn" onclick="openTab(event, 'part3')">Adj & Colors</button>
+            <button class="tab-btn" onclick="openTab(event, 'part4')">Grammar</button>
+            <button class="tab-btn" id="searchTabBtn" onclick="openTab(event, 'search-results-tab')" style="display:none; background: #6c5ce7;">Results</button>
+        </nav>
+
+        <!-- ======================= SEARCH RESULTS ======================= -->
+        <div id="search-results-tab" class="tab-content">
+            <h2 style="margin-top: 0;">🔎 Search Results</h2>
+            <div id="search-output"></div>
+            <p id="no-results" style="display:none; color: #888; text-align: center; margin-top:20px;">No matching notes found.</p>
+        </div>
+
+        <!-- ======================= CONTENT ======================= -->
+
+        <!-- TAB 1: Basics -->
+        <div id="part1" class="tab-content active">
+            <!-- ID ajouté pour le lien -->
+            <div class="note-bubble" id="batchim-explanation" data-title="What is Batchim">
+                <h3>🎓 What is Batchim (받침)?</h3>
+                <p>It's the <strong>final consonant</strong> positioned at the bottom of a Korean syllable block. It "supports" the syllable.</p>
+                <div style="display: flex; justify-content: center;">
+                    <div class="batchim-box">
+                        <span style="font-size: 1.8rem; color: #333; line-height: 1;">한 (Han)</span> <br>
+                        <span style="font-size: 0.9rem; color: #888;">ㅎ(h) + ㅏ(a) + <strong style="color: var(--accent-red);">ㄴ(n)</strong></span><br>
+                        <span style="color: var(--accent-red); font-weight: bold; font-size: 1.2rem;">ㄴ is the Batchim</span>
+                    </div>
+                </div>
+                <p><strong>Why is it important?</strong><br>
+                It determines which particle to use (e.g., <em>-ieyo</em> vs <em>-yeyo</em>) and how verbs conjugate.</p>
+            </div>
+
+            <h2 id="particles-title">Particles & Subject Markers</h2>
+            <div class="note-bubble" id="particles-note" data-title="Particles Distinction">
+                <strong>Important Distinction:</strong><br>
+                1. <strong>은/는 (Topic Marker):</strong> Defines the main theme ("As for...").<br>
+                2. <strong>이/가 (Subject Marker):</strong> Identifies the grammatical subject.
+            </div>
+            
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:25%">Type</th><th style="width:25%">Ends in Vowel</th><th style="width:25%">Ends in Consonant</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="english-word"><strong>Topic (Theme)</strong></td>
+                        <td class="korean-word">는</td>
+                        <td class="korean-word">은</td>
+                        <td class="example-cell">저<strong>는</strong> (As for me)<br>학생<strong>은</strong> (As for student)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word"><strong>Subject</strong></td>
+                        <td class="korean-word">가</td>
+                        <td class="korean-word">이</td>
+                        <td class="example-cell">제<strong>가</strong> (I)<br>가방<strong>이</strong> (The bag)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="tobe-title">To Be (이다)</h2>
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:25%">Condition</th><th style="width:25%">Form</th><th>Example Sentence</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="english-word">No Batchim</td><td class="korean-word">예요</td><td class="example-cell">저는 제니<strong>예요</strong>. (I am Jenny)</td></tr>
+                    <tr><td class="english-word">Batchim</td><td class="korean-word">이에요</td><td class="example-cell">학생<strong>이에요</strong>. (I am a student)</td></tr>
+                </tbody>
+            </table>
+            
+            <h2 id="pronouns-title">Pronouns & Intro</h2>
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:30%">Korean</th><th style="width:40%">Meaning</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="korean-word">저 / 제</td><td class="english-word">I / Me (Polite) / My</td><td class="example-cell"><strong>저</strong>는 학생이에요. (I am...)<br><strong>제</strong> 친구 (My friend)</td></tr>
+                    <tr><td class="korean-word">제 이름</td><td class="english-word">My name</td><td class="example-cell"><strong>제 이름</strong>은 란이에요. (My name is Ran)</td></tr>
+                    <tr><td class="korean-word">제가</td><td class="english-word">I (Subject form: 저+가)</td><td class="example-cell"><strong>제가</strong> 할게요. (I will do it)</td></tr>
+                </tbody>
+            </table>
+
+            <h2 id="countries-title">Countries (나라)</h2>
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:30%">Korean</th><th style="width:40%">Meaning</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="korean-word">한국</td><td class="english-word">Korea</td><td class="example-cell"><strong>한국</strong> 사람 (Korean person)</td></tr>
+                    <tr><td class="korean-word">프랑스</td><td class="english-word">France</td><td class="example-cell"><strong>프랑스</strong>에서 왔어요. (Came from France)</td></tr>
+                    <tr><td class="korean-word">미국</td><td class="english-word">USA</td><td class="example-cell"><strong>미국</strong> 사람이에요. (Is American)</td></tr>
+                    <tr><td class="korean-word">중국</td><td class="english-word">China</td><td class="example-cell"><strong>중국</strong> 음식 (Chinese food)</td></tr>
+                    <tr><td class="korean-word">일본</td><td class="english-word">Japan</td><td class="example-cell"><strong>일본</strong>에 가요. (Go to Japan)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 2: Family & Time (UPDATED) -->
+        <div id="part2" class="tab-content">
+            <h2 id="native-numbers-title">Native Numbers & Counters</h2>
+            <div class="note-bubble" id="native-numbers-rule" data-title="Native Numbers Rule">
+                ⚠️ <strong>Important Rule (from Notes):</strong><br>
+                Native numbers are used for: <strong>Age, Counting items, Hour</strong>.<br>
+                Numbers 1, 2, 3, 4, and 20 change form when used with a counter.<br>
+                <em>Ex: 1 girl = 아이 한 명 (Not 하나 명)</em>
+            </div>
+
+            <table class="vocab-table">
+                <thead>
+                    <tr>
+                        <th>Used For</th>
+                        <th>Counter (Korean)</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="english-word">People</td>
+                        <td class="korean-word">명 / 분 (Polite)</td>
+                        <td class="example-cell">한 <strong>명</strong> (1 person)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word">Animals</td>
+                        <td class="korean-word">마리</td>
+                        <td class="example-cell">두 <strong>마리</strong> (2 animals)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word">Objects (General)</td>
+                        <td class="korean-word">개</td>
+                        <td class="example-cell">세 <strong>개</strong> (3 items)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word">Bottles</td>
+                        <td class="korean-word">병</td>
+                        <td class="example-cell">네 <strong>병</strong> (4 bottles)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word">Cups / Glasses</td>
+                        <td class="korean-word">잔</td>
+                        <td class="example-cell">한 <strong>잔</strong> (1 cup)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word">Books</td>
+                        <td class="korean-word">권</td>
+                        <td class="example-cell">다섯 <strong>권</strong> (5 books)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word">Machines / Cars</td>
+                        <td class="korean-word">대</td>
+                        <td class="example-cell">한 <strong>대</strong> (1 car)</td>
+                    </tr>
+                    <tr>
+                        <td class="english-word">Age</td>
+                        <td class="korean-word">살</td>
+                        <td class="example-cell">스물세 <strong>살</strong> (23 years old)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note-bubble" id="sentence-structure-note" data-title="Counting Sentence Structure">
+                <strong>📝 Sentence Structure:</strong><br>
+                Object + <strong>이/가</strong> + Number + Counter + <strong>있어요</strong>.<br>
+                <em>Example:</em> 가방이 <span style="text-decoration: line-through; color: red;">하나 개</span> <strong>한 개</strong> 있어요.<br>
+                (There is one bag).
+            </div>
+
+            <h2 id="family-title">Family (가족)</h2>
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:30%">Korean</th><th style="width:40%">Meaning</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="korean-word">아버지 / 어머니</td><td class="english-word">Father / Mother</td><td class="example-cell">우리 <strong>어머니</strong>예요. (It's my mother)</td></tr>
+                    <tr><td class="korean-word">형 / 누나</td><td class="english-word">Older brother / sister (boy)</td><td class="example-cell"><strong>형</strong>이 있어요? (Do you have an older brother?)</td></tr>
+                    <tr><td class="korean-word">오빠 / 언니</td><td class="english-word">Older brother / sister (girl)</td><td class="example-cell">우리 <strong>언니</strong>는 예뻐요. (My older sister is pretty)</td></tr>
+                    <tr><td class="korean-word">남동생 / 여동생</td><td class="english-word">Younger brother / sister</td><td class="example-cell">제 <strong>여동생</strong>이에요. (She is my younger sister)</td></tr>
+                </tbody>
+            </table>
+
+            <h2 id="days-title">Days of the Week (요일)</h2>
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:30%">Korean</th><th style="width:40%">Meaning</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="korean-word">월요일</td><td class="english-word">Monday</td><td class="example-cell"><strong>월요일</strong>에 만나요. (Meet on Monday)</td></tr>
+                    <tr><td class="korean-word">화요일</td><td class="english-word">Tuesday</td><td class="example-cell"><strong>화요일</strong>은 바빠요. (Busy on Tuesday)</td></tr>
+                    <tr><td class="korean-word">수요일</td><td class="english-word">Wednesday</td><td class="example-cell"><strong>수요일</strong> 점심. (Wednesday lunch)</td></tr>
+                    <tr><td class="korean-word">목요일</td><td class="english-word">Thursday</td><td class="example-cell"><strong>목요일</strong> 밤. (Thursday night)</td></tr>
+                    <tr><td class="korean-word">금요일</td><td class="english-word">Friday</td><td class="example-cell">불타는 <strong>금요일</strong> (Fire Friday!)</td></tr>
+                    <tr><td class="korean-word">토요일</td><td class="english-word">Saturday</td><td class="example-cell"><strong>토요일</strong>에 쉬어요. (Rest on Saturday)</td></tr>
+                    <tr><td class="korean-word">일요일</td><td class="english-word">Sunday</td><td class="example-cell"><strong>일요일</strong> 아침. (Sunday morning)</td></tr>
+                </tbody>
+            </table>
+
+            <h2 id="months-title">Months of the Year (월)</h2>
+            <div class="note-bubble" id="months-note" data-title="Months Exceptions">
+                <strong>Format:</strong> Sino-Korean Number + 월.<br>
+                ⚠️ <strong>Exceptions:</strong> June (6월) is 유월 (not 육월), October (10월) is 시월 (not 십월).
+            </div>
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:30%">Korean</th><th style="width:40%">Meaning</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="korean-word">1월 ~ 12월</td><td class="english-word">Jan ~ Dec</td><td class="example-cell">제 생일은 <strong>10월(시월)</strong>이에요. (My birthday is in Oct)</td></tr>
+                </tbody>
+            </table>
+
+            <h2 id="time-title">Time & Sequences</h2>
+            <table class="vocab-table">
+                <thead>
+                    <tr><th style="width:30%">Korean</th><th style="width:40%">Meaning</th><th>Example</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td class="korean-word">부터 / 까지</td><td class="english-word">From / To (Duration/Time)</td><td class="example-cell">9시<strong>부터</strong> 6시<strong>까지</strong>. (From 9 to 6)</td></tr>
+                    <tr><td class="korean-word">오전 / 오후</td><td class="english-word">AM / PM</td><td class="example-cell"><strong>오전</strong> 10시 (10 AM).</td></tr>
+                    <tr><td class="korean-word">아침 / 점심 / 저녁</td><td class="english-word">Morning / Lunch / Dinner</td><td class="example-cell"><strong>아침</strong>을 먹어요. (I eat breakfast)</td></tr>
+                    <tr><td class="korean-word">-기 전에</td><td class="english-word">Before (ex: Sleeping)</td><td class="example-cell">자<strong>기 전에</strong> (Before sleeping).</td></tr>
+                    <tr><td class="korean-word">-(으)ㄴ 후에</td><td class="english-word">After (ex: Eating)</td><td class="example-cell">먹<strong>은 후에</strong> (After eating).</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 3: Adj & Colors -->
+        <div id="part3" class="tab-content">
+            <h2 id="adj-title">Adjectives (형용사)</h2>
+            <table class="vocab-table">
+                <thead><tr><th>Korean</th><th>Meaning / Opposite</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td class="korean-word">싸다 / 비싸다</td><td class="english-word">Cheap / Expensive</td><td class="example-cell">가방이 <strong>비싸요</strong>. (The bag is expensive)</td></tr>
+                    <tr><td class="korean-word">쉽다 / 어렵다</td><td class="english-word">Easy / Difficult</td><td class="example-cell">한국어가 <strong>어려워요</strong>. (Korean is difficult)</td></tr>
+                    <tr><td class="korean-word">예쁘다 / 멋있다</td><td class="english-word">Pretty / Cool</td><td class="example-cell">옷이 <strong>예뻐요</strong>. (The clothes are pretty)</td></tr>
+                    <tr><td class="korean-word">아프다 / 바쁘다</td><td class="english-word">Sick / Busy</td><td class="example-cell">오늘 <strong>바빠요</strong>. (I am busy today)</td></tr>
+                    <tr><td class="korean-word">가깝다 / 멀다</td><td class="english-word">Close / Far</td><td class="example-cell">집이 <strong>멀어요</strong>. (My house is far)</td></tr>
+                    <tr><td class="korean-word">넓다 / 좁다</td><td class="english-word">Wide / Narrow</td><td class="example-cell">방이 <strong>넓어요</strong>. (The room is wide)</td></tr>
+                    <tr><td class="korean-word">밝다 / 어둡다</td><td class="english-word">Bright / Dark</td><td class="example-cell">밖이 <strong>어두워요</strong>. (It is dark outside)</td></tr>
+                    <tr><td class="korean-word">깨끗하다 / 더럽다</td><td class="english-word">Clean / Dirty</td><td class="example-cell">방이 <strong>깨끗해요</strong>. (The room is clean)</td></tr>
+                    <tr><td class="korean-word">조용하다 / 시끄럽다</td><td class="english-word">Quiet / Noisy</td><td class="example-cell">도서관은 <strong>조용해요</strong>. (Library is quiet)</td></tr>
+                    <tr><td class="korean-word">가볍다 / 무겁다</td><td class="english-word">Light / Heavy</td><td class="example-cell">가방이 <strong>무거워요</strong>. (The bag is heavy)</td></tr>
+                    <tr><td class="korean-word">뜨겁다 / 차갑다</td><td class="english-word">Hot / Cold (touch)</td><td class="example-cell">커피가 <strong>뜨거워요</strong>. (The coffee is hot)</td></tr>
+                    <tr><td class="korean-word">덥다 / 춥다</td><td class="english-word">Hot / Cold (weather)</td><td class="example-cell">날씨가 <strong>추워요</strong>. (The weather is cold)</td></tr>
+                    <tr><td class="korean-word">크다 / 작다</td><td class="english-word">Big / Small</td><td class="example-cell">차가 <strong>커요</strong>. (The car is big)</td></tr>
+                    <tr><td class="korean-word">좋다 / 나쁘다</td><td class="english-word">Good / Bad</td><td class="example-cell">기분이 <strong>좋아요</strong>. (I feel good)</td></tr>
+                    <tr><td class="korean-word">빠르다 / 느리다</td><td class="english-word">Fast / Slow</td><td class="example-cell">비행기는 <strong>빨라요</strong>. (The plane is fast)</td></tr>
+                    <tr><td class="korean-word">맵다</td><td class="english-word">Spicy</td><td class="example-cell">김치가 <strong>매워요</strong>. (Kimchi is spicy)</td></tr>
+                </tbody>
+            </table>
+            
+            <!-- COLORS & FOOD SECTION -->
+            <h2 id="colors-food-title">Colors & Food (색깔과 음식)</h2>
+            <table class="vocab-table">
+                <thead><tr><th>Category</th><th>Korean</th><th>English</th><th style="text-align:center;">Illustration</th><th>Example</th></tr></thead>
+                <tbody>
+                    <!-- Colors -->
+                    <tr><td rowspan="5" style="vertical-align:middle; font-weight:bold;">Colors<br>(색깔)</td><td class="korean-word">빨간색</td><td class="english-word">Red</td><td style="text-align:center; font-size:1.5rem;">🔴</td><td class="example-cell">빨간색 사과 (Red apple)</td></tr>
+                    <tr><td class="korean-word">주황색</td><td class="english-word">Orange</td><td style="text-align:center; font-size:1.5rem;">🟠</td><td class="example-cell">주황색 오렌지 (Orange orange)</td></tr>
+                    <tr><td class="korean-word">노란색</td><td class="english-word">Yellow</td><td style="text-align:center; font-size:1.5rem;">🟡</td><td class="example-cell">노란색 바나나 (Yellow banana)</td></tr>
+                    <tr><td class="korean-word">초록색</td><td class="english-word">Green</td><td style="text-align:center; font-size:1.5rem;">🟢</td><td class="example-cell">초록색 야채 (Green vegetable)</td></tr>
+                    <tr><td class="korean-word">파란색</td><td class="english-word">Blue</td><td style="text-align:center; font-size:1.5rem;">🔵</td><td class="example-cell">파란색 하늘 (Blue sky)</td></tr>
+                    
+                    <!-- Fruits & Veg -->
+                    <tr><td rowspan="6" style="vertical-align:middle; font-weight:bold; border-top: 2px solid var(--accent-pink);">Fruits & Veg<br>(과일/야채)</td><td class="korean-word">사과</td><td class="english-word">Apple</td><td style="text-align:center; font-size:1.5rem;">🍎</td><td class="example-cell">사과가 맛있어요. (Apple is tasty)</td></tr>
+                    <tr><td class="korean-word">바나나</td><td class="english-word">Banana</td><td style="text-align:center; font-size:1.5rem;">🍌</td><td class="example-cell">바나나 우유 (Banana milk)</td></tr>
+                    <tr><td class="korean-word">포도</td><td class="english-word">Grapes</td><td style="text-align:center; font-size:1.5rem;">🍇</td><td class="example-cell">포도 주스 (Grape juice)</td></tr>
+                    <tr><td class="korean-word">딸기</td><td class="english-word">Strawberry</td><td style="text-align:center; font-size:1.5rem;">🍓</td><td class="example-cell">딸기 케이크 (Strawberry cake)</td></tr>
+                    <tr><td class="korean-word">당근</td><td class="english-word">Carrot</td><td style="text-align:center; font-size:1.5rem;">🥕</td><td class="example-cell">당근을 싫어해요. (I dislike carrots)</td></tr>
+                    <tr><td class="korean-word">오이</td><td class="english-word">Cucumber</td><td style="text-align:center; font-size:1.5rem;">🥒</td><td class="example-cell">오이 김치 (Cucumber kimchi)</td></tr>
+
+                    <!-- Drinks -->
+                    <tr><td rowspan="8" style="vertical-align:middle; font-weight:bold; border-top: 2px solid var(--accent-pink);">Drinks<br>(음료)</td><td class="korean-word">물</td><td class="english-word">Water</td><td style="text-align:center; font-size:1.5rem;">💧</td><td class="example-cell">물 주세요. (Water please)</td></tr>
+                    <tr><td class="korean-word">커피</td><td class="english-word">Coffee</td><td style="text-align:center; font-size:1.5rem;">☕</td><td class="example-cell">아이스 커피 (Iced coffee)</td></tr>
+                    <tr><td class="korean-word">주스</td><td class="english-word">Juice</td><td style="text-align:center; font-size:1.5rem;">🧃</td><td class="example-cell">오렌지 주스 (Orange juice)</td></tr>
+                    <tr><td class="korean-word">우유</td><td class="english-word">Milk</td><td style="text-align:center; font-size:1.5rem;">🥛</td><td class="example-cell">초코 우유 (Chocolate milk)</td></tr>
+                    <tr><td class="korean-word">차</td><td class="english-word">Tea</td><td style="text-align:center; font-size:1.5rem;">🍵</td><td class="example-cell">녹차 (Green tea)</td></tr>
+                    <!-- Vegetable Milks -->
+                    <tr><td class="korean-word">오트 우유</td><td class="english-word">Oat Milk</td><td style="text-align:center; font-size:1.5rem;">🌾</td><td class="example-cell">오트 우유로 주세요. (With oat milk please)</td></tr>
+                    <tr><td class="korean-word">아몬드 우유</td><td class="english-word">Almond Milk</td><td style="text-align:center; font-size:1.5rem;">🥜</td><td class="example-cell">아몬드 우유 있어요? (Have almond milk?)</td></tr>
+                    <tr><td class="korean-word">코코넛 밀크</td><td class="english-word">Coconut Milk</td><td style="text-align:center; font-size:1.5rem;">🥥</td><td class="example-cell">코코넛 밀크 넣어요. (Put coconut milk in)</td></tr>
+                </tbody>
+            </table>
+
+            <h2 id="positions-title">Positions (위치)</h2>
+            <table class="vocab-table" style="text-align: center;">
+                <thead><tr><th style="text-align:center;">Korean</th><th style="text-align:center;">Meaning</th><th style="text-align:center;">Illustration</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td class="korean-word">앞</td><td class="english-word">Front</td><td style="font-size: 2rem;">🧍‍♂️📦</td><td class="example-cell">상자 <strong>앞</strong> (In front of box)</td></tr>
+                    <tr><td class="korean-word">뒤</td><td class="english-word">Back</td><td style="font-size: 2rem;">📦🧍‍♂️</td><td class="example-cell">상자 <strong>뒤</strong> (Behind box)</td></tr>
+                    <tr><td class="korean-word">위</td><td class="english-word">On / Above</td><td style="font-size: 2rem;">📦<br>🪑</td><td class="example-cell">의자 <strong>위</strong> (On the chair)</td></tr>
+                    <tr><td class="korean-word">아래 (밑)</td><td class="english-word">Under / Below</td><td style="font-size: 2rem;">🪑<br>📦</td><td class="example-cell">의자 <strong>아래</strong> (Under the chair)</td></tr>
+                    <tr><td class="korean-word">옆</td><td class="english-word">Next to</td><td style="font-size: 2rem;">📦🧍‍♂️</td><td class="example-cell">상자 <strong>옆</strong> (Next to box)</td></tr>
+                    <tr><td class="korean-word">안</td><td class="english-word">Inside</td><td style="font-size: 2rem;">🗳️</td><td class="example-cell">상자 <strong>안</strong> (Inside box)</td></tr>
+                    <tr><td class="korean-word">밖</td><td class="english-word">Outside</td><td style="font-size: 2rem;">📦 🏃</td><td class="example-cell">집 <strong>밖</strong> (Outside house)</td></tr>
+                    <tr><td class="korean-word">사이</td><td class="english-word">Between</td><td style="font-size: 2rem;">📦🧍‍♂️📦</td><td class="example-cell">상자 <strong>사이</strong> (Between boxes)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- TAB 4: Grammar -->
+        <div id="part4" class="tab-content">
+            <h2 id="irregulars-title">⚠️ Special Batchim Rules (Irregulars)</h2>
+            <table class="vocab-table">
+                <thead><tr><th>Rule</th><th>Explanation</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td class="korean-word">ㄷ (d) → ㄹ (l)</td>
+                        <td class="english-word"><strong>Listening / Walking</strong></td>
+                        <td class="example-cell">듣다 → <strong>들어요</strong> (Listen)<br>걷다 → <strong>걸어요</strong> (Walk)</td>
+                    </tr>
+                    <tr>
+                        <td class="korean-word">ㅂ (b) → 우 (u)</td>
+                        <td class="english-word"><strong>Descriptive Verbs</strong></td>
+                        <td class="example-cell">춥다 → <strong>추워요</strong> (Cold)<br>맵다 → <strong>매워요</strong> (Spicy)</td>
+                    </tr>
+                    <tr>
+                        <td class="korean-word">ㄹ (l) Specials</td>
+                        <td class="english-word"><strong>Behaves like Vowel</strong> (No Batchim)</td>
+                        <td class="example-cell">만들다 + 세요 → <strong>만드세요</strong> (Please make)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="basic-grammar-title">Particles & Basic Structures</h2>
+            <table class="vocab-table">
+                <thead><tr><th>Pattern</th><th>Meaning</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td class="grammar-pattern">Noun + 의</td>
+                        <td class="english-word">Possessive (Of/'s)</td>
+                        <td class="example-cell">선생님<strong>의</strong> 가방 (Teacher's bag)<br>나의 → 내 (My)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-고 (and)</td>
+                        <td class="english-word">Conjunction</td>
+                        <td class="example-cell">넓<strong>고</strong> 조용해요 (Wide AND quiet)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-고 있다</td>
+                        <td class="english-word">Present Continuous (ing)</td>
+                        <td class="example-cell">마시<strong>고 있어요</strong> (Am drinking)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-고 싶다</td>
+                        <td class="english-word">Want to</td>
+                        <td class="example-cell">가<strong>고 싶어요</strong> (Want to go)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-(으)세요</td>
+                        <td class="english-word">Imperative (Please do)</td>
+                        <td class="example-cell">오<strong>세요</strong> (Please come)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-(으)니까</td>
+                        <td class="english-word">Because (Causal)</td>
+                        <td class="example-cell">먹으<strong>니까</strong> (Because I eat)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-(으)면</td>
+                        <td class="english-word">If (Conditional)</td>
+                        <td class="example-cell">공부하<strong>면</strong> (If I study)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">랑/이랑, 하고</td>
+                        <td class="english-word">With</td>
+                        <td class="example-cell">친구<strong>랑</strong> (With friend)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="advanced-grammar-title">Advanced Structures & Future</h2>
+            <table class="vocab-table">
+                <thead><tr><th>Pattern</th><th>Meaning</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td class="grammar-pattern">-(으)ㄹ까요?</td>
+                        <td class="english-word">Suggestions (Shall we?)</td>
+                        <td class="example-cell">먹<strong>을까요?</strong> (Shall we eat?)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-(으)면서</td>
+                        <td class="english-word">While (Simultaneity)</td>
+                        <td class="example-cell">먹으<strong>면서</strong> (While eating)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-지만</td>
+                        <td class="english-word">But (Contrast)</td>
+                        <td class="example-cell">작<strong>지만</strong> 커요 (Small BUT big)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">-(으)ㄹ 거예요</td>
+                        <td class="english-word">Future Tense</td>
+                        <td class="example-cell">갈 <strong>거예요</strong> (Will go)</td>
+                    </tr>
+                    <tr>
+                        <td class="grammar-pattern">안 / -지 않다</td>
+                        <td class="english-word">Negation (Not)</td>
+                        <td class="example-cell"><strong>안</strong> 자요 (Short)<br>바쁘<strong>지 않아요</strong> (Long)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 id="medical-title">Medical Vocab</h2>
+            <table class="vocab-table">
+                <thead><tr><th>Korean</th><th>Meaning</th><th>Example</th></tr></thead>
+                <tbody>
+                    <tr><td class="korean-word">장염</td><td class="english-word">Enteritis</td><td class="example-cell"><strong>장염</strong>이에요. (I have enteritis)</td></tr>
+                    <tr><td class="korean-word">걸렸어요</td><td class="english-word">Caught a disease</td><td class="example-cell">감기에 <strong>걸렸어요</strong>. (Caught a cold)</td></tr>
+                    <tr><td class="korean-word">어떻게 먹어요?</td><td class="english-word">How to take med?</td><td class="example-cell">이 약 <strong>어떻게 먹어요?</strong> (How to take this?)</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script>
+        let lastActiveTabId = 'part1';
+
+        // --------------------------------------------------------
+        // PAPAGO TRANSLATION WIDGET LOGIC
+        // --------------------------------------------------------
+        function openTranslator() {
+            document.getElementById('transModal').style.display = 'flex';
+            document.getElementById('transInput').focus();
+        }
+
+        function closeTranslator(e) {
+            // Close only if clicked on background or X button
+            if (e && e.target !== e.currentTarget) return;
+            document.getElementById('transModal').style.display = 'none';
+        }
+
+        function translateText() {
+            const text = document.getElementById('transInput').value.trim();
+            if (!text) return;
+
+            // Naver Papago URL format (Detection Auto -> English or Vice Versa)
+            // sk=auto (Source Language: Auto)
+            // tk=en (Target Language: English - User can change this on site easily)
+            // st= (Search Text)
+            
+            // Check if text contains Korean characters
+            const hasKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(text);
+            const targetLang = hasKorean ? 'en' : 'ko'; // If Korean input, target English. Else target Korean.
+            
+            const url = `https://papago.naver.com/?sk=auto&tk=${targetLang}&st=${encodeURIComponent(text)}`;
+            
+            // Open in new tab
+            window.open(url, '_blank');
+        }
+
+        // Allow pressing Enter to translate
+        document.getElementById('transInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                translateText();
+            }
+        });
+
+
+        // --------------------------------------------------------
+        // TTS / Prononciation Functionality (Gratuit via Web Speech API)
+        // --------------------------------------------------------
+        
+        let preferredVoice = null;
+
+        // Fonction pour charger et sélectionner la voix
+        function loadVoices() {
+            const voices = window.speechSynthesis.getVoices();
+            
+            // Filter for Korean voices
+            const koreanVoices = voices.filter(voice => voice.lang.includes('ko'));
+
+            if (koreanVoices.length === 0) {
+                console.warn("No Korean voice found.");
+                return;
+            }
+
+            // Strategy to find a "nice female voice":
+            // 1. Look for 'Google' (usually high quality female on Chrome)
+            // 2. Look for 'Yuna', 'Sora' (Apple high quality female)
+            // 3. Look for 'Female' in the name
+            // 4. Fallback to the first Korean voice found
+            
+            preferredVoice = koreanVoices.find(voice => voice.name.includes('Google')) 
+                          || koreanVoices.find(voice => voice.name.includes('Yuna'))
+                          || koreanVoices.find(voice => voice.name.includes('Sora'))
+                          || koreanVoices.find(voice => voice.name.includes('Female'))
+                          || koreanVoices[0];
+            
+            console.log("Selected voice:", preferredVoice ? preferredVoice.name : "None");
+        }
+
+        // Charger les voix dès que possible (nécessaire pour Chrome)
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices(); // Appel initial au cas où elles seraient déjà chargées
+
+        function speak(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ko-KR'; 
+            utterance.rate = 0.8;     
+            utterance.pitch = 1;
+            
+            // Appliquer la voix préférée si trouvée
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
+            }
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const koreanWords = document.querySelectorAll('.korean-word');
+            koreanWords.forEach(td => {
+                const btn = document.createElement('button');
+                btn.innerHTML = '🔊'; 
+                btn.className = 'speak-btn';
+                btn.title = 'Listen';
+                
+                // Get direct text only, ignore child elements (like the button itself if rerun)
+                let textToSpeak = "";
+                td.childNodes.forEach(node => {
+                    if(node.nodeType === 3) textToSpeak += node.textContent;
+                });
+                
+                btn.onclick = (e) => {
+                    e.stopPropagation(); 
+                    speak(textToSpeak);
+                };
+                td.appendChild(btn);
+            });
+        });
+
+        // --------------------------------------------------------
+        // Navigation & Recherche
+        // --------------------------------------------------------
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add("active");
+                if(tabName !== 'search-results-tab') {
+                    lastActiveTabId = tabName;
+                    document.getElementById('searchTabBtn').style.display = 'none';
+                }
+            } else {
+                if(tabName !== 'search-results-tab') {
+                   const btn = document.querySelector(`button[onclick*='${tabName}']`);
+                   if(btn) btn.classList.add("active");
+                   lastActiveTabId = tabName;
+                   document.getElementById('searchTabBtn').style.display = 'none';
+                } else {
+                   document.getElementById('searchTabBtn').style.display = 'block';
+                   document.getElementById('searchTabBtn').classList.add("active");
+                }
+            }
+        }
+
+        function goToSection(tabId, elementId) {
+            openTab(null, tabId);
+            setTimeout(() => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    element.classList.add('flash-highlight');
+                    setTimeout(() => element.classList.remove('flash-highlight'), 2000);
+                }
+            }, 100);
+        }
+
+        function performSearch() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const searchTabBtn = document.getElementById('searchTabBtn');
+            const searchOutput = document.getElementById('search-output');
+            const noResults = document.getElementById('no-results');
+            
+            if (filter === "") {
+                if(lastActiveTabId) openTab(null, lastActiveTabId);
+                searchTabBtn.style.display = 'none';
+                return;
+            }
+
+            searchTabBtn.style.display = 'block';
+            openTab(null, 'search-results-tab');
+
+            searchOutput.innerHTML = '';
+            let count = 0;
+
+            const contentTabs = document.querySelectorAll('.tab-content:not(#search-results-tab)');
+
+            contentTabs.forEach(tab => {
+                const tabId = tab.id;
+                
+                const titles = tab.querySelectorAll('h2, h3');
+                titles.forEach((title, index) => {
+                    const text = title.innerText;
+                    if (text.toUpperCase().includes(filter)) {
+                        if(!title.id) title.id = `temp-title-${tabId}-${index}`;
+                        createResultCard("Section Title", text, tabId, title.id);
+                        count++;
+                    }
+                });
+
+                const bubbles = tab.querySelectorAll('.note-bubble');
+                bubbles.forEach((bubble, index) => {
+                    const text = bubble.innerText;
+                    const metaTitle = bubble.getAttribute('data-title') || "Explanation / Rule";
+                    if (text.toUpperCase().includes(filter) || metaTitle.toUpperCase().includes(filter)) {
+                        if(!bubble.id) bubble.id = `temp-bubble-${tabId}-${index}`;
+                        let snippet = text.substring(0, 100) + "...";
+                        createResultCard(metaTitle, snippet, tabId, bubble.id);
+                        count++;
+                    }
+                });
+
+                const rows = tab.querySelectorAll('.vocab-table tbody tr');
+                rows.forEach((row, index) => {
+                    const text = row.innerText;
+                    if (text.toUpperCase().includes(filter)) {
+                        if(!row.id) row.id = `temp-row-${tabId}-${index}`;
+                        const cells = row.querySelectorAll('td');
+                        let displayTitle = "Vocabulary";
+                        let displayText = text;
+                        if(cells.length >= 2) {
+                            displayTitle = cells[0].innerText.replace('🔊', '').trim();
+                            displayText = cells[1].innerText;
+                        }
+                        createResultCard(displayTitle, displayText, tabId, row.id);
+                        count++;
+                    }
+                });
+            });
+
+            if (count > 0) {
+                noResults.style.display = 'none';
+            } else {
+                noResults.style.display = 'block';
+            }
+
+            function createResultCard(title, content, tabId, elementId) {
+                const card = document.createElement('div');
+                card.className = 'search-result-card';
+                card.onclick = function() { goToSection(tabId, elementId); };
+                
+                card.innerHTML = `
+                    <div class="result-tag">${tabId.replace('part', 'Part ')}</div>
+                    <div style="font-weight:bold; color: #d63031; margin-bottom:4px;">${title}</div>
+                    <div class="result-content">${content}</div>
+                    <div class="result-arrow">➔</div>
+                `;
+                searchOutput.appendChild(card);
+            }
+        }
+    </script>
+</body>
+</html>
